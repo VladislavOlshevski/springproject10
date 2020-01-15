@@ -43,6 +43,7 @@ public class Task {
     private List<Activity> activities;
     @Transient
     private Activity lastActivity;
+
     public Task() {
     }
 }

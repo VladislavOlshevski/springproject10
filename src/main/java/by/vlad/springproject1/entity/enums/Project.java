@@ -17,7 +17,8 @@ public class Project {
     @Column(name = "public")
     private Boolean isPublic;
     @Column(name = "created")
-    private LocalDateTime created;@OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval =
+    private LocalDateTime created;
+    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval =
             true)
     private ProjectInfo projectInfo;
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval
@@ -29,21 +30,23 @@ public class Project {
     private Double estimate;
     @Transient
     private Double elapsed;
+
     public Project() {
     }
+
     public Project(User user, Boolean isPublic, LocalDateTime created) {
         this.user = user;
         this.isPublic = isPublic;
         this.created = created;
     }
-    @PostLoad
-    public void postLoad() {
-        estimate = tasks
-                .stream()
-                .mapToDouble(t -> t.getEstimate() != null ? t.getEstimate() : 0)
-                .sum();
-        elapsed = tasks
-                .stream()
-                .mapToDouble(t -> t.getElapsed() != null ? t.getElapsed() : 0)
-                .sum();
-    } }
+//    @PostLoad
+//    public void postLoad() {
+//        estimate = tasks
+//                .stream()
+//                .mapToDouble(t -> t.getEstimate() != null ? t.getEstimate() : 0)
+//                .sum();
+//        elapsed = tasks
+//                .stream()
+//                .mapToDouble(t -> t.getElapsed() != null ? t.getElapsed() : 0)
+//                .sum();}
+}

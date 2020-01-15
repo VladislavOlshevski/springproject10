@@ -1,5 +1,12 @@
 package by.vlad.springproject1.util;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Mapper {
     private static ModelMapper modelMapper;
     static {
