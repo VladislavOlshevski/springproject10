@@ -1,6 +1,6 @@
 package by.vlad.springproject1.service;
 
-import by.vlad.springproject1.entity.Person;
+import by.vlad.springproject1.entity.enums.Person;
 
 import java.util.List;
 import java.util.Optional;

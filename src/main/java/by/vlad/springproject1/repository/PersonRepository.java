@@ -1,7 +1,6 @@
 package by.vlad.springproject1.repository;
 
-import by.vlad.springproject1.entity.Person;
-import org.springframework.beans.factory.annotation.Autowired;
+import by.vlad.springproject1.entity.enums.Person;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

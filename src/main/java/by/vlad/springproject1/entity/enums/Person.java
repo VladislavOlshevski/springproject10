@@ -1,4 +1,4 @@
-package by.vlad.springproject1.entity;
+package by.vlad.springproject1.entity.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

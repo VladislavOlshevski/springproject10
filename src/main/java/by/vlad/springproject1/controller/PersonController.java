@@ -1,7 +1,7 @@
 package by.vlad.springproject1.controller;
 
 import by.vlad.springproject1.dto.NewPersonDto;
-import by.vlad.springproject1.entity.Person;
+import by.vlad.springproject1.entity.enums.Person;
 import by.vlad.springproject1.exceptions.NoSuchEntityException;
 import by.vlad.springproject1.service.PersonService;
 import lombok.extern.slf4j.Slf4j;

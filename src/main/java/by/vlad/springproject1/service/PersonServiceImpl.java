@@ -1,6 +1,6 @@
 package by.vlad.springproject1.service;
 
-import by.vlad.springproject1.entity.Person;
+import by.vlad.springproject1.entity.enums.Person;
 import by.vlad.springproject1.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
