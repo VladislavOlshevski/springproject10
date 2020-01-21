@@ -33,4 +33,7 @@ public class Person {
     private Date birthday;
     @Column(name = "phone")
     private String phone;
+
+    public void setId(Long id) {
+    }
 }

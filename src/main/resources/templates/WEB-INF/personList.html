@@ -4,6 +4,26 @@
     <meta charset="UTF-8" />
     <title>Person List</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+
+    <script
+            src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        var prefix = '/personList';
+        var RestGet = function() {
+            $.ajax({
+                type: 'GET',
+                url: prefix + '/' + 10,
+                dataType: 'json',
+                async: true,
+                success: function(result) {
+                    alert('сообщение: ' + result.message);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.status + ' ' + jqXHR.responseText);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
 <h1>Person List</h1>
