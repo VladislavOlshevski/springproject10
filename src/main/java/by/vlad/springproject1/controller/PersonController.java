@@ -7,6 +7,12 @@ import by.vlad.springproject1.exceptions.NoSuchEntityException;
 import by.vlad.springproject1.exceptions.ResourceNotFoundException;
 import by.vlad.springproject1.service.PersonService;
 import by.vlad.springproject1.util.Mapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -160,16 +166,30 @@ class PersonController {
         return resource;
     }
 
+    @Operation(summary = "Find person by ID", description = "Returns a single person", tags = {
+            "person" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation",
+                    content = @Content(schema = @Schema(implementation = Person.class))),
+            @ApiResponse(responseCode = "404", description = "Person not found") })
     @GetMapping(value = {"/personList/{id}"})
-    public EntityModel<PersonDto> findById(@PathVariable("id") Long id) throws
-            ResourceNotFoundException {
-        PersonDto personid = Mapper.map(personService.getById(id),
-                PersonDto.class);
-        Link link = new Link("http://localhost:8080/personList/").withSelfRel();
-        EntityModel<PersonDto> rezult = new EntityModel<PersonDto>(personid,
-                link);
-        return rezult;
+    public PersonDto findById(
+            @Parameter(description="Id of the person to be obtained. Cannot be empty",
+                    required=true)
+            @PathVariable("id") Long id) throws ResourceNotFoundException {
+        return Mapper.map(personService.getById(id), PersonDto.class);
     }
+
+//    @GetMapping(value = {"/personList/{id}"})
+//    public EntityModel<PersonDto> findById(@PathVariable("id") Long id) throws
+//            ResourceNotFoundException {
+//        PersonDto personid = Mapper.map(personService.getById(id),
+//                PersonDto.class);
+//        Link link = new Link("http://localhost:8080/personList/").withSelfRel();
+//        EntityModel<PersonDto> rezult = new EntityModel<PersonDto>(personid,
+//                link);
+//        return rezult;
+//    }
 
     @PutMapping(value = "/editPerson/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -191,6 +211,7 @@ class PersonController {
             ResourceNotFoundException {
         personService.deletePerson(personService.getById(id));
     }
+
 }
 
 
