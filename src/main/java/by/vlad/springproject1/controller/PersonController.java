@@ -10,6 +10,7 @@ import by.vlad.springproject1.util.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+
+import static org.springframework.hateoas.server.core.DummyInvocationUtils.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 //@Slf4j
 //@RestController
@@ -133,38 +137,54 @@ class PersonController {
     private String message;
     @Value("${error.message}")
     private String errorMessage;
+
     @Autowired
     public PersonController(PersonService personService) {
         this.personService = personService;
 // this.personRepository = personRepository;
     }
+
     //, produces = { "application/json" , "application/xml"}
     @GetMapping(value = {"/personList"})
-    public List<PersonDto> personList() {
-        return Mapper.mapAll(personService.getAllPerson(), PersonDto.class);
+    public CollectionModel<EntityModel<PersonDto>> personList() {
+// return Mapper.mapAll(personService.getAllPerson(), PersonDto.class);
+        CollectionModel<EntityModel<PersonDto>> resource = CollectionModel.wrap(
+                Mapper.mapAll(personService.getAllPerson(), PersonDto.class));
+        for (final EntityModel<PersonDto> res : resource) {
+            Link selfLink = linkTo(PersonController.class)
+                    .slash(res.getContent().getPersonId()).withSelfRel();
+            res.add(selfLink);
+        }
+        resource.add(linkTo(methodOn(PersonController.class)
+                .personList()).withRel("all"));
+        return resource;
     }
+
     @GetMapping(value = {"/personList/{id}"})
     public EntityModel<PersonDto> findById(@PathVariable("id") Long id) throws
             ResourceNotFoundException {
         PersonDto personid = Mapper.map(personService.getById(id),
                 PersonDto.class);
         Link link = new Link("http://localhost:8080/personList/").withSelfRel();
-        EntityModel <PersonDto> rezult = new EntityModel <PersonDto>(personid,
+        EntityModel<PersonDto> rezult = new EntityModel<PersonDto>(personid,
                 link);
         return rezult;
     }
+
     @PutMapping(value = "/editPerson/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void editPerson(@PathVariable("id") Long id, @Valid @RequestBody
             PersonDto persondto) throws ResourceNotFoundException {
         personService.getById(id);
-        personService.editPerson(Mapper.map(persondto, Person.class),id);
+        personService.editPerson(Mapper.map(persondto, Person.class), id);
     }
+
     @PostMapping("/addPerson")
     @ResponseStatus(HttpStatus.CREATED)
-    public void savePerson( @Valid @RequestBody NewPersonDto personDto) {
+    public void savePerson(@Valid @RequestBody NewPersonDto personDto) {
         personService.addNewPerson(Mapper.map(personDto, Person.class));
     }
+
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deletePerson(@PathVariable("id") Long id) throws
